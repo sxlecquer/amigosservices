@@ -21,7 +21,8 @@
 
 	<modules>
 		<module>customer</module>
-	</modules>
+        <module>fraud</module>
+    </modules>
 
 	<dependencyManagement>
 		<dependencies>
