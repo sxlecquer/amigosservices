@@ -20,7 +20,7 @@ public record CustomerService(CustomerRepository customerRepository, RestTemplat
         // todo: validate email
         customerRepository.saveAndFlush(customer);
         FraudCheckHistoryResponse fraudCheckHistoryResponse = restTemplate.getForObject(
-                "http://localhost:8081/api/v1/fraud-check/{customerId}",
+                "http://fraud/api/v1/fraud-check/{customerId}",
                 FraudCheckHistoryResponse.class, customer.getId()
         );
         if(Objects.requireNonNull(fraudCheckHistoryResponse).isFraudster()) {
