@@ -1,6 +1,6 @@
 package com.example.fraud.controller;
 
-import com.example.fraud.model.FraudCheckHistoryResponse;
+import com.example.clients.fraud.FraudCheckHistoryResponse;
 import com.example.fraud.service.FraudCheckHistoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;

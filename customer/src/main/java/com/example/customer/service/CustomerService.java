@@ -1,9 +1,9 @@
 package com.example.customer.service;
 
-import com.example.customer.client.FraudClient;
+import com.example.clients.fraud.FraudClient;
 import com.example.customer.entity.Customer;
 import com.example.customer.model.CustomerRegistrationRequest;
-import com.example.customer.model.FraudCheckHistoryResponse;
+import com.example.clients.fraud.FraudCheckHistoryResponse;
 import com.example.customer.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
