@@ -35,12 +35,20 @@ services:
     ports:
       - "9411:9411"
 
-  rabbitmq:
-    container_name: rabbitmq
-    image: rabbitmq:3.13.0-management-alpine
+  zookeeper:
+    container_name: zookeeper
+    image: confluentinc/cp-zookeeper
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - "2181:2181"
+
+  kafka:
+    container_name: kafka
+    image: confluentinc/cp-kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
 
 networks:
   postgres:
