@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
-@SpringBootApplication(scanBasePackages = {"com.example.amqp", "com.example.notification"})
+@SpringBootApplication(scanBasePackages = {"com.example.kafka", "com.example.notification"})
 @EnableDiscoveryClient
 public class NotificationApplication {
 

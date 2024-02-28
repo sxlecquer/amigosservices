@@ -1,4 +1,4 @@
-package com.exampe.kafka;
+package com.example.kafka;
 
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Value;

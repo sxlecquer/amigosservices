@@ -23,6 +23,8 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       group-id: notification-group
       auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: '*'
 
 eureka:
   instance:
