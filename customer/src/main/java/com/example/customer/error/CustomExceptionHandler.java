@@ -11,4 +11,9 @@ public class CustomExceptionHandler {
     public ProblemDetail onIllegalStateException(IllegalStateException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getMessage());
     }
+
+    @ExceptionHandler(IncorrectEmailException.class)
+    public ProblemDetail onIncorrectEmailException(IncorrectEmailException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
 }
