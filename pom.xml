@@ -28,7 +28,8 @@
         <module>notification</module>
         <module>api-gateway</module>
         <module>kafka</module>
-    </modules>
+		<module>config-server</module>
+	</modules>
 
 	<dependencyManagement>
 		<dependencies>
