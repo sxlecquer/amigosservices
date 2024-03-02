@@ -15,7 +15,7 @@ import java.util.Objects;
 @Service
 public record CustomerService(CustomerRepository customerRepository, FraudClient fraudClient, KafkaProducer producer) {
     public void registerCustomer(CustomerRegistrationRequest request) {
-        if(!request.email().matches("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$")) {
+        if(!request.email().matches("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^@_!#$%&’*+/=?`{|}~^.-][A-Za-z0-9_-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$")) {
             throw new IncorrectEmailException("Incorrect email address provided");
         }
 
