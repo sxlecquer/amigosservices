@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 public class KafkaProducer {
-    private final KafkaTemplate<String, NotificationRequest> kafkaTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate; // the value is of type Object that allows to create and use more produceXXX() methods in the future
 
     @Value("${topics.names.notification}")
     private String notificationTopic;

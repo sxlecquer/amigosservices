@@ -6,6 +6,4 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/sxlecquer/amigosservices
-          username: sxlecquer
-          password:
+          uri: https://github.com/sxlecquer/amigosservices # this repository is public, so there is no need to specify username and password
