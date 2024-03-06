@@ -34,6 +34,8 @@ services:
     image: openzipkin/zipkin
     ports:
       - "9411:9411"
+    networks:
+      - spring
 
   zookeeper:
     container_name: zookeeper
@@ -43,6 +45,8 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - "2181:2181"
+    networks:
+      - spring
 
   kafka:
     container_name: kafka
@@ -57,9 +61,110 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - spring
+    # todo: change kafka service config since our microservices were dockerized
+
+  config-server:
+    container_name: config-server
+    image: sxlecquer/config-server:latest
+#    pull_policy: always
+    ports:
+      - "8888:8888"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - zipkin
+    networks:
+      - spring
+
+  eureka-server:
+    container_name: eureka-server
+    image: sxlecquer/eureka-server:latest
+#    pull_policy: always
+    ports:
+      - "8761:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - zipkin
+    networks:
+      - spring
+
+  api-gateway:
+    container_name: api-gateway
+    image: sxlecquer/api-gateway:latest
+#    pull_policy: always
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - config-server
+      - zipkin
+      - eureka-server
+    networks:
+      - spring
+
+  customer:
+    container_name: customer
+    image: sxlecquer/customer:latest
+#    pull_policy: always
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - config-server
+      - zipkin
+      - eureka-server
+      - postgres
+      - kafka
+    networks:
+      - spring
+      - postgres
+
+  fraud:
+    container_name: fraud
+    image: sxlecquer/fraud:latest
+#    pull_policy: always
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - config-server
+      - zipkin
+      - eureka-server
+      - postgres
+      - kafka
+    networks:
+      - spring
+      - postgres
+
+  notification:
+    container_name: notification
+    image: sxlecquer/notification:latest
+#    pull_policy: always
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - config-server
+      - zipkin
+      - eureka-server
+      - postgres
+      - kafka
+    networks:
+      - spring
+      - postgres
+
 
 networks:
   postgres:
+    driver: bridge
+  spring:
     driver: bridge
 
 volumes:

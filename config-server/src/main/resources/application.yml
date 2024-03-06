@@ -7,3 +7,8 @@ spring:
       server:
         git:
           uri: https://github.com/sxlecquer/amigosservices # this repository is public, so there is no need to specify username and password
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
