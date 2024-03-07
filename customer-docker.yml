@@ -1,18 +1,5 @@
 spring:
   datasource:
-    username: amigoscode
-    password: password
     url: jdbc:postgresql://postgres:5432/customer
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
-    show-sql: true
   kafka:
-    bootstrap-servers: kafka:29092
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    bootstrap-servers: kafka:9092
