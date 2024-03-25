@@ -8,6 +8,10 @@ services:
       PGDATA: /data/postgres
     volumes:
       - postgres:/data/postgres
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "amigoscode"]
+      timeout: 20s
+      retries: 10
     ports:
       - "5432:5432"
     networks:
@@ -63,63 +67,79 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     networks:
       - spring
-    # todo: change kafka service config since our microservices were dockerized
 
   config-server:
     container_name: config-server
     image: sxlecquer/config-server:latest
-#    pull_policy: always
+    pull_policy: missing
     ports:
       - "8888:8888"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://config-server:8888/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     depends_on:
-      - zipkin
+      zipkin:
+        condition: service_healthy
     networks:
       - spring
 
   eureka-server:
     container_name: eureka-server
     image: sxlecquer/eureka-server:latest
-#    pull_policy: always
+    pull_policy: missing
     ports:
       - "8761:8761"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
-      - zipkin
+      zipkin:
+        condition: service_healthy
     networks:
       - spring
 
   api-gateway:
     container_name: api-gateway
     image: sxlecquer/api-gateway:latest
-#    pull_policy: always
+    pull_policy: missing
     ports:
       - "8083:8083"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - spring.config.import=optional:configserver:http://config-server:8888
     depends_on:
-      - config-server
-      - zipkin
-      - eureka-server
+      config-server:
+        condition: service_healthy
+      zipkin:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
     networks:
       - spring
 
   customer:
     container_name: customer
     image: sxlecquer/customer:latest
-#    pull_policy: always
+    pull_policy: missing
     ports:
       - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - spring.config.import=optional:configserver:http://config-server:8888
     depends_on:
-      - config-server
-      - zipkin
-      - eureka-server
-      - postgres
-      - kafka
+      config-server:
+        condition: service_started
+      zipkin:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_started
     networks:
       - spring
       - postgres
@@ -127,17 +147,23 @@ services:
   fraud:
     container_name: fraud
     image: sxlecquer/fraud:latest
-#    pull_policy: always
+    pull_policy: missing
     ports:
       - "8081:8081"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - spring.config.import=optional:configserver:http://config-server:8888
     depends_on:
-      - config-server
-      - zipkin
-      - eureka-server
-      - postgres
-      - kafka
+      config-server:
+        condition: service_started
+      zipkin:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_started
     networks:
       - spring
       - postgres
@@ -145,17 +171,23 @@ services:
   notification:
     container_name: notification
     image: sxlecquer/notification:latest
-#    pull_policy: always
+    pull_policy: missing
     ports:
       - "8082:8082"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - spring.config.import=optional:configserver:http://config-server:8888
     depends_on:
-      - config-server
-      - zipkin
-      - eureka-server
-      - postgres
-      - kafka
+      config-server:
+        condition: service_started
+      zipkin:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_started
     networks:
       - spring
       - postgres
