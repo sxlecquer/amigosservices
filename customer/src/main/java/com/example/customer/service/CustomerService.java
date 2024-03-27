@@ -7,7 +7,7 @@ import com.example.customer.error.IncorrectEmailException;
 import com.example.customer.model.CustomerRegistrationRequest;
 import com.example.clients.fraud.FraudCheckHistoryResponse;
 import com.example.customer.repository.CustomerRepository;
-import com.example.kafka.KafkaProducer;
+import com.example.customer.kafka.KafkaProducer;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
