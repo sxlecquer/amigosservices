@@ -9,6 +9,7 @@ spring:
       server:
         git:
           uri: https://github.com/sxlecquer/microservices # this repository is public, so there is no need to specify username and password
+          default-label: master
 
 management:
   tracing:
